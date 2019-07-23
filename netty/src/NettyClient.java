@@ -39,6 +39,7 @@ public class NettyClient extends SimpleChannelInboundHandler<String> {
             channelFuture.cancel(true);
             channelFuture = null;
         }
+
     }
 
     @Override
