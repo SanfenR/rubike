@@ -11,7 +11,9 @@
 4. New Task, 并在新的Task中启动目标activity
 5. 检查这个进程的ProcessRecord是否存在，如果不存在则创建新的进程实例化Activity
 6. ActivityManagerService调用startProcessLocked()方法来创建新的进程，通过socket通道传递参数给Zygote进程，Zygote孵化并调用ZygoteInit.main()方法实例化ActivityThread对象并最终返回新进程的pid。
-7. ActivityThread对象调用bindApplication()方法发送一个BIND_APPLICATION消息，handle处理调用makeApplication()方法来加载App的classes到内存中.
+7. Zygote进程孵化出新的应用进程后，会执行ActivityThread类的main方法.在该方法里会先准备好Looper和消息队列，然后调用attach方法将应用进程绑定到ActivityManagerService，然后进入loop循环，不断地读取消息队列里的消息，并分发消息。
+8. ActivityThread的main方法执行后,应用进程接下来通知ActivityManagerService应用进程已启动，ActivityManagerService保存应用进程的一个代理对象
+9. ActivityThread对象调用bindApplication()方法发送一个BIND_APPLICATION消息，handle处理调用makeApplication()方法来加载App的classes到内存中.然后ActivityManagerService通知应用进程创建入口Activity的实例，并执行它的生命周期方法
 
 ## Zygote启动流程
 1. ZygoteInit.java 的 main
@@ -85,3 +87,4 @@ static void preload(TimingsTraceLog bootTimingsTraceLog) {
     }
 
 ```
+[链接](https://github.com/SanfenR/rubike/tree/master/android/AppStartDemo)
