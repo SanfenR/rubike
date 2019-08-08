@@ -40,3 +40,5 @@
 
 `LeakCanary`
 
+
+[源码](https://github.com/SanfenR/rubike/tree/master/android/ANRDemo)
